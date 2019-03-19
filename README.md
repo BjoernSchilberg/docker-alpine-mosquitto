@@ -1,4 +1,17 @@
-# README
+# Docker mosquitto test environment
+
+- [Docker mosquitto test environment](#docker-mosquitto-test-environment)
+  - [Start a simple "standard" mosquitto server](#start-a-simple-%22standard%22-mosquitto-server)
+  - [Start a mosquitto server with SSL and authentication support](#start-a-mosquitto-server-with-ssl-and-authentication-support)
+  - [Change mosquitto password](#change-mosquitto-password)
+  - [Maintenance work in docker environment](#maintenance-work-in-docker-environment)
+    - [Access a running instance](#access-a-running-instance)
+    - [Access a running instance as root](#access-a-running-instance-as-root)
+    - [Remove all containers](#remove-all-containers)
+    - [Delete all untagged images](#delete-all-untagged-images)
+    - [Delete all unused volumes](#delete-all-unused-volumes)
+  - [Client](#client)
+  - [Links](#links)
 
 ## Start a simple "standard" mosquitto server
 
@@ -6,7 +19,7 @@
 docker run --name mosquitto -it -p 1883:1883 eclipse-mosquitto:1.5.8
 ```
 
-## Start a mosquitto server with SSL support.
+## Start a mosquitto server with SSL and authentication support
 
 ```shell
 docker run --name mosquitto -it -p 8883:8883 -v $PWD/mosquitto.conf:/mosquitto/config/mosquitto.conf -v $PWD/certs:/mosquitto/certs -v $PWD/password_file:/mosquitto/config/password_file eclipse-mosquitto:1.5.8
@@ -25,7 +38,6 @@ Copy `password_file` to docker host.
 ```shell
 docker cp mosquitto:/mosquitto/config/password_file .
 ```
-
 
 ## Maintenance work in docker environment
 
@@ -61,7 +73,7 @@ docker volume prune
 
 ## Client
 
-- https://mosquitto.org/man/mosquitto_pub-1.html (client for publishing simple messages) 
+- https://mosquitto.org/man/mosquitto_pub-1.html (client for publishing simple messages)
 - http://mqttfx.org
 - https://hobbyquaker.github.io/mqtt-admin/ (websocket test client)
 
