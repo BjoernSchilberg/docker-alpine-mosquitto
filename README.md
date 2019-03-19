@@ -71,11 +71,14 @@ docker rmi $(docker images | grep "^<none>" | awk '{print $3}')
 docker volume prune
 ```
 
-## Client
+## Clients
 
 - https://mosquitto.org/man/mosquitto_pub-1.html (client for publishing simple messages)
 - http://mqttfx.org
+- https://kamilfb.github.io/mqtt-spy/
 - https://hobbyquaker.github.io/mqtt-admin/ (websocket test client)
+- https://github.com/hivemq/hivemq-mqtt-web-client (websocket test client)
+- https://play.google.com/store/apps/details?id=at.tripwire.mqtt.client
 
 ## Links
 
