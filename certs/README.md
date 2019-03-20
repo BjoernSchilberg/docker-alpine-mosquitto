@@ -5,17 +5,8 @@
   - [Client Requirements](#client-requirements)
   - [Important note](#important-note)
   - [Generate a certificate authority (CA) certificate and key](#generate-a-certificate-authority-ca-certificate-and-key)
-    - [Generate a certificate authority (CA) key](#generate-a-certificate-authority-ca-key)
-    - [Generate a certificate authority (CA) certificate](#generate-a-certificate-authority-ca-certificate)
-    - [Check certificate authority (CA) certificate](#check-certificate-authority-ca-certificate)
   - [Generate a server certificate](#generate-a-server-certificate)
-    - [Generate a server key without encryption](#generate-a-server-key-without-encryption)
-    - [Create a certificate request](#create-a-certificate-request)
-    - [Verify CSR file](#verify-csr-file)
-    - [Generate server certificate](#generate-server-certificate)
-    - [Check server certificate](#check-server-certificate)
-    - [Verify server certificate](#verify-server-certificate)
-  - [Client certificate](#client-certificate)
+  - [Generate a client certificate](#generate-a-client-certificate)
   - [Tests](#tests)
   - [Clients for testing](#clients-for-testing)
     - [mosquitto_pub](#mosquittopub)
@@ -49,19 +40,19 @@ error server.crt: verification failed
 
 ## Generate a certificate authority (CA) certificate and key
 
-### Generate a certificate authority (CA) key
+Generate a certificate authority (CA) key.
 
 ```shell
 openssl genrsa -des3 -out ca.key 2048
 ```
 
-### Generate a certificate authority (CA) certificate
+Generate a certificate authority (CA) certificate.
 
 ```shell
 openssl req -new -x509 -key ca.key -out ca.crt -config ca.conf
 ```
 
-### Check certificate authority (CA) certificate
+Check certificate authority (CA) certificate.
 
 ```shell
 openssl x509 -in ca.crt -noout -text
@@ -69,19 +60,19 @@ openssl x509 -in ca.crt -noout -text
 
 ## Generate a server certificate
 
-### Generate a server key without encryption
+Generate a server key without encryption.
 
 ```shell
 openssl genrsa -out server.key 2048
 ```
 
-### Create a certificate request
+Create a certificate request.
 
 ```shell
 openssl req -new -out server.csr -key server.key -config server.conf
 ```
 
-### Verify CSR file
+Verify CSR file.
 
 ```shell
 openssl req -noout -text -in server.csr
@@ -89,19 +80,19 @@ openssl req -noout -text -in server.csr
 
 Note: We don’t send this to the CA as we are the CA.
 
-### Generate server certificate
+Generate server certificate.
 
 ```shell
 openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
 ```
 
-### Check server certificate
+Check server certificate.
 
 ```shell
 openssl x509 -in server.crt -noout -text
 ```
 
-### Verify server certificate
+Verify server certificate.
 
 Verify that a server certificate is signed by a particular CA.
 
@@ -115,14 +106,44 @@ it should return
 server.crt: OK
 ```
 
-## Client certificate
+## Generate a client certificate
 
-A CA (certificate authority) certificate of the CA that has signed the server
-certificate on the Mosquitto Broker.
+Generate a client key.
 
-You only need to provide the root CA certificate to the client.
+```shell
+#openssl genrsa -des3 -out client.key 2048
+openssl genrsa -out client.key 2048
+```
 
-TODO
+Generate a certificate signing request to send to the CA.
+
+```shell
+openssl req -out client.csr -key client.key -new -config client.conf
+```
+
+Send the CSR to the CA, or sign it with your CA key:
+
+```shell
+openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out client.crt -addtrust clientAuth
+```
+
+Check client certificate.
+
+```shell
+openssl x509 -in client.crt -noout -text
+```
+
+Verify that a server certificate is signed by a particular CA.
+
+```shell
+openssl verify -CAfile ca.crt client.crt
+```
+
+it should return:
+
+```shell
+server.crt: OK
+```
 
 ## Tests
 
@@ -144,6 +165,12 @@ openssl s_client -connect localhost:8883 -CAfile ca.crt
 
 ```shell
 mosquitto_pub -h localhost -p 8883 --cafile ca.crt -u testuser -P testuser -t test/topic -m "message"
+```
+
+Using a client certificate.
+
+```shell
+mosquitto_pub -h localhost -p 8883 --cafile ca.crt -u testuser -P testuser -t test/topic -m "message" --cert client.crt --key client.key
 ```
 
 ## Links

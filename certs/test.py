@@ -19,7 +19,13 @@ def on_disconnect(client, userdata, rc):
 
 client1 = paho.Client("control1")
 client1.on_log=on_log
+
+## Using without client certificate
 client1.tls_set("ca.crt")
+
+## Using a client certificate
+#client1.tls_set(ca_certs="ca.crt", certfile="client.crt", keyfile="client.key")
+
 client1.username_pw_set("testuser",password="testuser")
 client1.on_connect=on_connect
 client1.on_disconnect=on_disconnect
