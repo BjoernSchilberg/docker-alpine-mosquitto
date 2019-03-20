@@ -3,10 +3,11 @@
 - [Generating certificates](#generating-certificates)
   - [Broker Requirements](#broker-requirements)
   - [Client Requirements](#client-requirements)
+  - [Hints](#hints)
   - [Important note](#important-note)
   - [Generate a certificate authority (CA) certificate and key](#generate-a-certificate-authority-ca-certificate-and-key)
   - [Generate a server certificate](#generate-a-server-certificate)
-  - [Generate a client certificate](#generate-a-client-certificate)
+  - [Generate a client certificate (optional)](#generate-a-client-certificate-optional)
   - [Tests](#tests)
   - [Clients for testing](#clients-for-testing)
     - [mosquitto_pub](#mosquittopub)
@@ -22,7 +23,18 @@ Place your SSL/TLS server keys and certificates in the `certs` directory.
 
 ## Client Requirements
 
-- Client certificate signed with the certificate authority (CA) key.
+- A CA (certificate authority) certificate of the CA that has signed the
+server certificate on the Mosquitto Broker.
+- Or a client certificate signed with the certificate authority (CA) key. (optional)
+
+## Hints
+
+Use the private key to create a certificate signing request (CSR). The CSR
+details don’t need to match the intermediate CA. For server certificates, the
+Common Name must be a fully qualified domain name (eg, www.example.com),
+whereas for client certificates it can be any unique identifier (eg, an
+e-mail address). Note that the Common Name cannot be the same as either your
+root or intermediate certificate.
 
 ## Important note
 
@@ -106,7 +118,7 @@ it should return
 server.crt: OK
 ```
 
-## Generate a client certificate
+## Generate a client certificate (optional)
 
 Generate a client key.
 
@@ -159,7 +171,7 @@ openssl s_client -connect localhost:8883 -CAfile ca.crt
 
 - https://mosquitto.org/man/mosquitto_pub-1.html
 - http://mqttfx.org/
-- Python script `test.py`
+- Python script [test.py](test.py) (works with python2 and python3)
 
 ### mosquitto_pub
 
