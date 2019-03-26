@@ -8,6 +8,7 @@
   - [Maintenance work in docker environment](#maintenance-work-in-docker-environment)
   - [MQTT Clients](#mqtt-clients)
   - [Links](#links)
+  - [Licenses](#licenses)
 
 ## Start a simple "standard" mosquitto server
 
@@ -89,3 +90,18 @@ docker volume prune
   - https://github.com/eclipse/mosquitto/tree/master/docker/1.5
   - https://hub.docker.com/_/eclipse-mosquitto
   - https://docs.docker.com/samples/library/eclipse-mosquitto/
+
+## Licenses
+
+- Eclipse Mosquitto is released under the [EPL](https://www.eclipse.org/legal/epl-v10.html)/[EDL](https://www.eclipse.org/org/documents/edl-v10.php).
+- Docker's open source components are generally licensed under the [Apache 2.0 license](https://choosealicense.com/licenses/apache-2.0/).
+- All written documents in this repo are licensed under [CC0](https://choosealicense.com/licenses/cc0-1.0/)
+
+As with all Docker images, these likely also contain other software which may
+be under other licenses (such as Bash, etc from the base distribution, along
+with any direct or indirect dependencies of the primary software being
+contained).
+
+As for any pre-built image usage, it is the image user’s responsibility to
+ensure that any use of this image complies with any relevant licenses for all
+software contained within.
